@@ -74,3 +74,7 @@ for role in roles:  # role을 돌며 rolename을 name 변수에 넣고 get_role 
         print(name, f"90일 내 사용 기록 없음 | {last_used_date}")
     else:
         print(name, f"90일 내 사용 기록 있음 | {last_used_date}")
+
+# 리스트 계열의 api 사용 시 주의점
+# MaxItems란 파라미터를 사용하지 않으면 기본적으로 100개만 출력되고, 넘어가는 값들에 대해선 마커 등을 사용하여 다시 받아야 하는 불편함이 있다.
+# > paginator 함수를 사용하면 이 부분을 편리하게 사용할 수 있다.
