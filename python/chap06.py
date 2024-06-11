@@ -18,11 +18,9 @@ def get_role_last_used_date(iam, role_name):
 
 if __name__ == "__main__":
     start_time = time.time()
-    print(start_time)
 
     iam = boto3.client("iam", config=Config(max_pool_connections=1000))
     roles = iam.list_roles()["Roles"]
-
 
     ###############################################
     # No MultiThreads
@@ -37,15 +35,15 @@ if __name__ == "__main__":
     ###############################################
     # Yes MultiThreads
     ###############################################
-    # threads = []
-    # pool = ThreadPoolExecutor(max_workers=len(roles))
+    threads = []
+    pool = ThreadPoolExecutor(max_workers=len(roles))
 
-    # for role in roles:
-    #     #threads.append(pool.submit(get_role_last_used_date, iam, role["RoleName"]))
-    #     threads.append(pool.submit(get_role_last_used_date, iam, role["RoleName"]))
+    for role in roles:
+        #threads.append(pool.submit(get_role_last_used_date, iam, role["RoleName"]))
+        threads.append(pool.submit(get_role_last_used_date, iam, role["RoleName"]))
 
-    # for future in as_completed(threads):
-    #     name, last_used_date = future.result()
-    #     print(name, last_used_date)
+    for future in as_completed(threads):
+        name, last_used_date = future.result()
+        print(name, last_used_date)
 
-    # print(f"ELAPSED TIME: {time.time() - start_time:.3f}s")
+    print(f"ELAPSED TIME: {time.time() - start_time:.3f}s")
