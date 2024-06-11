@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "this" {
-  #   name = "test_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -12,14 +11,13 @@ resource "aws_iam_role" "this" {
         Effect = "Allow"
         Sid    = ""
         Principal = {
-          #   Service = "ec2.amazonaws.com"
-          AWS = aws_iam_user.this.arn
+            Service = "ec2.amazonaws.com"
         }
       },
     ]
   })
   inline_policy {
-    name = "my_inline_policy"
+    name = "tf_inline_policy"
     policy = jsonencode({
       Version = "2012-10-17"
       Statement = [
@@ -35,20 +33,26 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_policy" "policy" {
-  name        = "test_policy"
+  name        = "tf-test-policy"
   path        = "/"
-  description = "My test policy"
-  policy      = data.aws_iam_policy_document.this.json
+  description = "test policy"
+  policy = data.aws_iam_policy_document.this.json
 }
+    #   policy      = jsonencode({
+    #     Version = "2012-10-17"
+    #     Statement = [
+    #         {
+    #             Action = ["ec2:Describe*"]
+    #             Effect = "Allow"
+    #             Resource = "*"
+    #         }
+    #     ]
+    #   })
 
 data "aws_iam_policy_document" "this" {
   statement {
     sid    = "1"
     effect = "Allow"
-    # principals {
-    #   type        = "Service"
-    #   identifiers = ["ec2.amazonaws.com"]
-    # }
     actions = [
       "sts:AssumeRole",
     ]
@@ -58,7 +62,7 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
-resource "aws_iam_user" "this" {
-  name = "rextest"
-  path = "/"
-}
+# resource "aws_iam_user" "this" {
+#   name = "rextest"
+#   path = "/"
+# }
