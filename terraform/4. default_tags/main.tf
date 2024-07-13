@@ -19,6 +19,6 @@ locals {
 resource "aws_iam_user" "this" {
   name = "hb"
   tags = {
-    "Date" = "202407"
+    "Date" = "2024-07-13"
   }
 }
